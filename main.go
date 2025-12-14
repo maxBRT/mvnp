@@ -1,9 +1,10 @@
+/*
+Copyright © 2025 MAXBRT
+*/
 package main
 
-import (
-	"fmt"
-)
+import "github.com/maxbrt/maven-plus/cmd"
 
 func main() {
-	fmt.Println("Hello World")
+	cmd.Execute()
 }
