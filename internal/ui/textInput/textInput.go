@@ -22,7 +22,7 @@ type model struct {
 	header    string
 }
 
-func InitialTextInput(output *Output, header string) model {
+func InitialModel(output *Output, header string) model {
 	ti := textinput.New()
 	ti.Focus()
 	ti.CharLimit = 156
@@ -64,9 +64,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	return fmt.Sprintf(
-		"%s\n\n%s\n\n%s",
+		"%s\n\n%s\n\n",
 		m.header,
 		m.textInput.View(),
-		"(esc to quit)",
 	) + "\n"
 }
