@@ -6,31 +6,20 @@ import (
 )
 
 type ProjectObjecModel struct {
-	XMLName            xml.Name     `xml:"project"`
-	GroupId            string       `xml:"groupId"`
-	ArtifactId         string       `xml:"artifactId"`
-	Version            string       `xml:"version"`
-	JavaVersionSource  string       `xml:"properties>maven.compiler.source"`
-	JavaVersionRelease string       `xml:"properties>maven.compiler.release"`
-	Dependencies       []Dependency `xml:"dependencies>dependency"`
-	Build              Build        `xml:"build"`
-}
-
-type Dependency struct {
-	GroupId    string `xml:"groupId"`
-	ArtifactId string `xml:"artifactId"`
-	Version    string `xml:"version"`
-	Scope      string `xml:"scope"`
+	XMLName              xml.Name     `xml:"project"`
+	ModelVersion         string       `xml:"modelVersion"`
+	GroupId              string       `xml:"groupId"`
+	ArtifactId           string       `xml:"artifactId"`
+	Version              string       `xml:"version"`
+	JavaVersionSource    string       `xml:"properties>maven.compiler.source"`
+	JavaVersionRelease   string       `xml:"properties>maven.compiler.release"`
+	DependencyManagement []Dependency `xml:"dependencyManagement>dependencies>dependency"`
+	Dependencies         []Dependency `xml:"dependencies>dependency"`
+	Build                Build        `xml:"build"`
 }
 
 type Build struct {
 	Plugins []Plugin `xml:"pluginManagement>plugins>plugin"`
-}
-
-type Plugin struct {
-	GroupId    string `xml:"groupId"`
-	ArtifactId string `xml:"artifactId"`
-	Version    string `xml:"version"`
 }
 
 func UnmarshalPOM(filePath string) (*ProjectObjecModel, error) {
@@ -46,4 +35,8 @@ func UnmarshalPOM(filePath string) (*ProjectObjecModel, error) {
 	}
 
 	return pom, nil
+}
+
+func (pom *ProjectObjecModel) MarshalPOM() ([]byte, error) {
+	return xml.MarshalIndent(pom, "", "\t")
 }

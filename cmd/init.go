@@ -2,14 +2,15 @@ package cmd
 
 import (
 	"bytes"
-	"encoding/xml"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 
+	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/maxbrt/mvnp/internal/ui/multiInput"
 	"github.com/maxbrt/mvnp/internal/ui/spinner"
 	"github.com/maxbrt/mvnp/internal/ui/textInput"
 	projectobjectmodel "github.com/maxbrt/mvnp/internal/xml/projectObjectModel"
@@ -19,11 +20,20 @@ import (
 type mvnProject struct {
 	GroupId    *textInput.Output
 	ArtifactId *textInput.Output
+	Version    *textInput.Output
 }
 
 type projectGenResult struct {
 	err    error
 	stderr string
+}
+
+var javaVersions = []list.Item{
+	multiInput.Item("8"),
+	multiInput.Item("11"),
+	multiInput.Item("17"),
+	multiInput.Item("21"),
+	multiInput.Item("25"),
 }
 
 // initCmd represents the init command
@@ -39,6 +49,7 @@ var initCmd = &cobra.Command{
 		project := mvnProject{
 			GroupId:    &textInput.Output{},
 			ArtifactId: &textInput.Output{},
+			Version:    &textInput.Output{},
 		}
 
 		// Create and run the groupId input program
@@ -56,6 +67,15 @@ var initCmd = &cobra.Command{
 		if _, err := tprogram.Run(); err != nil {
 			cobra.CheckErr(err)
 		}
+
+		version := multiInput.InitialModel(javaVersions, "Select your Java Version")
+		tprogram = tea.NewProgram(version)
+
+		m, err := tprogram.Run()
+		if err != nil {
+			cobra.CheckErr(err)
+		}
+		project.Version.Output = m.(multiInput.Model).Choice
 
 		// Run spinner while generating project
 		var result projectGenResult
@@ -84,7 +104,36 @@ var initCmd = &cobra.Command{
 		if err != nil {
 			cobra.CheckErr(result.err)
 		}
-		fmt.Println(pom)
+
+		// Set the Java version
+		pom.JavaVersionRelease = project.Version.Output
+		pom.JavaVersionSource = project.Version.Output
+
+		// Add the exec-maven-plugin
+		pom.AddPlugin(projectobjectmodel.Plugin{
+			GroupId:    "org.codehaus.mojo",
+			ArtifactId: "exec-maven-plugin",
+			Version:    "3.6.2",
+			Configuration: &projectobjectmodel.PluginConfig{
+				ConfigTags: []projectobjectmodel.ConfigTag{
+					{
+						Name:  "mainClass",
+						Value: project.GroupId.Output + ".App",
+					},
+				},
+			},
+		})
+
+		// Rewrite pom.xml
+		pomBytes, err := pom.MarshalPOM()
+		if err != nil {
+			cobra.CheckErr(err)
+		}
+
+		err = os.WriteFile(filepath.Join(project.ArtifactId.Output, "pom.xml"), pomBytes, 0644)
+		if err != nil {
+			cobra.CheckErr(err)
+		}
 
 	},
 }
