@@ -2,14 +2,17 @@ package cmd
 
 import (
 	"bytes"
+	"encoding/xml"
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/maxbrt/mvnp/internal/ui/spinner"
 	"github.com/maxbrt/mvnp/internal/ui/textInput"
+	projectobjectmodel "github.com/maxbrt/mvnp/internal/xml/projectObjectModel"
 	"github.com/spf13/cobra"
 )
 
@@ -75,6 +78,13 @@ var initCmd = &cobra.Command{
 		if result.err != nil {
 			cobra.CheckErr(result.err)
 		}
+
+		// Read pom.xml
+		pom, err := projectobjectmodel.UnmarshalPOM(filepath.Join(project.ArtifactId.Output, "pom.xml"))
+		if err != nil {
+			cobra.CheckErr(result.err)
+		}
+		fmt.Println(pom)
 
 	},
 }
