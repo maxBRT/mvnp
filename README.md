@@ -41,23 +41,6 @@ go build -o mvnp
 - Maven installed and available in your PATH
 - Java Development Kit (JDK)
 
-## Quick Start
-
-Get up and running in seconds:
-
-```bash
-# Create a new project
-mvnp init
-
-# Run your project
-mvnp run
-
-# Run tests
-mvnp test
-```
-
----
-
 ## Usage
 
 ### Create a New Project
