@@ -39,8 +39,29 @@ var javaVersions = []list.Item{
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "Create a new Java project with maven",
-	Long:  ``,
+	Short: "Create a new Maven Java project with interactive setup",
+	Long: `Create a new Maven Java project with interactive setup.
+
+This command guides you through creating a new Maven project using the
+maven-archetype-quickstart. It interactively prompts for:
+  - GroupId: Your project's group identifier (e.g., com.example)
+  - ArtifactId: Your project's artifact identifier (e.g., my-app)
+  - Java Version: Target Java version (8, 11, 17, 21, or 25)
+
+The generated project includes:
+  - Standard Maven directory structure
+  - Configured pom.xml with selected Java version
+  - exec-maven-plugin configured for running with 'mvnp run'
+  - Sample App.java with main method
+  - Sample unit test
+
+Examples:
+  # Create a new project with interactive prompts
+  mvnp init
+
+After creation, navigate to your project directory and use:
+  mvnp run   - to compile and run your application
+  mvnp test  - to run your tests`,
 	Run: func(cmd *cobra.Command, args []string) {
 		c := exec.Command("clear")
 		c.Stdout = os.Stdout
