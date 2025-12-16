@@ -6,6 +6,7 @@ import (
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/maxbrt/mvnp/internal/ui/styles"
 )
 
 type errMsg error
@@ -23,7 +24,8 @@ type model struct {
 func InitialModel(message string, task func() error) model {
 	s := spinner.New()
 	s.Spinner = spinner.Dot
-	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+	s.Style = lipgloss.NewStyle().Foreground(styles.Primary).Bold(true)
+	s.Style = lipgloss.NewStyle().MarginLeft(2)
 	return model{
 		spinner: s,
 		message: message,
@@ -74,9 +76,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	if m.err != nil {
-		return m.err.Error()
+		return ""
 	}
-	str := fmt.Sprintf("\n %s %s\n\n", m.spinner.View(), m.message)
+
+	messageStyle := lipgloss.NewStyle().
+		Foreground(styles.Info).
+		MarginLeft(1)
+
+	str := fmt.Sprintf("\n%s %s\n\n", m.spinner.View(), messageStyle.Render(m.message))
 	if m.quitting {
 		return str + "\n"
 	}

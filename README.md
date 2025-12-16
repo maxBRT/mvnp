@@ -49,22 +49,6 @@ go build -o mvnp
 mvnp init
 ```
 
-Interactively prompts you for:
-
-| Field | Description | Example |
-|-------|-------------|---------|
-| **GroupId** | Your project's group identifier | `com.example` |
-| **ArtifactId** | Your project's artifact identifier | `my-app` |
-| **Java Version** | Target Java version | `8`, `11`, `17`, `21`, or `25` |
-
-**What you get:**
-
-- Standard Maven directory structure
-- Configured `pom.xml` with selected Java version
-- `exec-maven-plugin` pre-configured for `mvnp run`
-- Sample `App.java` with main method
-- Sample unit test
-
 ### Run Your Project
 
 ```bash

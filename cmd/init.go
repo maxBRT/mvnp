@@ -10,6 +10,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/maxbrt/mvnp/internal/ui/logo"
 	"github.com/maxbrt/mvnp/internal/ui/multiInput"
 	"github.com/maxbrt/mvnp/internal/ui/spinner"
 	"github.com/maxbrt/mvnp/internal/ui/textInput"
@@ -73,9 +74,14 @@ After creation, navigate to your project directory and use:
 			Version:    &textInput.Output{},
 		}
 
+		tprogram := tea.NewProgram(logo.Model{})
+		if _, err := tprogram.Run(); err != nil {
+			cobra.CheckErr(err)
+		}
+
 		// Create and run the groupId input program
 		groupIdModel := textInput.InitialModel(project.GroupId, "Enter your GroupId")
-		tprogram := tea.NewProgram(groupIdModel)
+		tprogram = tea.NewProgram(groupIdModel)
 
 		// Run the program - the value will be saved to project.GroupId.Output automatically
 		if _, err := tprogram.Run(); err != nil {
@@ -109,14 +115,12 @@ After creation, navigate to your project directory and use:
 			cobra.CheckErr(err)
 		}
 
-		// Display stderr output after spinner is done (even if there's an error)
-		if result.stderr != "" {
-			fmt.Fprint(os.Stderr, result.stderr)
-			fmt.Fprintln(os.Stderr) // Add newline for clarity
-		}
-
-		// Check for errors
+		// Check for errors and display them
 		if result.err != nil {
+			// Display Maven's stderr output if available
+			if result.stderr != "" {
+				fmt.Println(result.stderr)
+			}
 			cobra.CheckErr(result.err)
 		}
 

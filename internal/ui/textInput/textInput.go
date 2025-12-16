@@ -5,6 +5,8 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
+	"github.com/maxbrt/mvnp/internal/ui/styles"
 )
 
 type (
@@ -26,7 +28,11 @@ func InitialModel(output *Output, header string) model {
 	ti := textinput.New()
 	ti.Focus()
 	ti.CharLimit = 156
-	ti.Width = 20
+	ti.Width = 40
+	ti.Prompt = "│ "
+	ti.PromptStyle = lipgloss.NewStyle().Foreground(styles.Primary)
+	ti.TextStyle = lipgloss.NewStyle().Foreground(styles.Accent)
+	ti.Cursor.Style = lipgloss.NewStyle().Foreground(styles.Primary)
 
 	return model{
 		textInput: ti,
@@ -63,9 +69,27 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
+	headerStyle := lipgloss.NewStyle().
+		Foreground(styles.Primary).
+		Bold(true).
+		MarginLeft(2)
+
+	inputBoxStyle := lipgloss.NewStyle().
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(styles.Primary).
+		Padding(0, 1).
+		MarginLeft(2)
+
+	helpStyle := lipgloss.NewStyle().
+		Foreground(styles.Muted).
+		Italic(true).
+		MarginTop(1).
+		MarginLeft(2)
+
 	return fmt.Sprintf(
-		"%s\n\n%s\n\n",
-		m.header,
-		m.textInput.View(),
-	) + "\n"
+		"\n%s\n%s\n\n%s\n",
+		headerStyle.Render(m.header),
+		inputBoxStyle.Render(m.textInput.View()),
+		helpStyle.Render("Press Enter to confirm • Esc to cancel"),
+	)
 }

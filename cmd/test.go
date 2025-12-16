@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 
+	"github.com/maxbrt/mvnp/internal/ui/styles"
 	"github.com/spf13/cobra"
 )
 
@@ -28,21 +30,29 @@ Examples:
 		var c *exec.Cmd
 
 		if len(args) > 0 {
+			fmt.Println(styles.InfoMessage(fmt.Sprintf("Running tests matching: %s", args[0])))
 			// Run specific tests
 			testArg := "-Dtest=" + args[0]
 			c = exec.Command("mvn", "test", testArg)
 		} else {
+			fmt.Println(styles.InfoMessage("Running all tests..."))
 			// Run all tests
 			c = exec.Command("mvn", "test")
 		}
+		fmt.Println()
 
 		c.Stdout = os.Stdout
 		c.Stderr = os.Stderr
 
 		err := c.Run()
 		if err != nil {
+			fmt.Println()
+			fmt.Println(styles.ErrorMessage("Tests failed"))
 			cobra.CheckErr(err)
 		}
+
+		fmt.Println()
+		fmt.Println(styles.SuccessMessage("All tests passed!"))
 	},
 }
 

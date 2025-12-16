@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/maxbrt/mvnp/internal/ui/styles"
 	"github.com/spf13/cobra"
 )
 
@@ -27,6 +28,9 @@ Examples:
   mvnp run arg1 arg2 arg3
 `,
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(styles.InfoMessage("Compiling and running your project..."))
+		fmt.Println()
+
 		joinedArgs := strings.Join(args, " ")
 
 		mavenArgs := fmt.Sprintf("-Dexec.args=%s", joinedArgs)
@@ -38,8 +42,13 @@ Examples:
 
 		err := c.Run()
 		if err != nil {
+			fmt.Println()
+			fmt.Println(styles.ErrorMessage("Failed to run project"))
 			cobra.CheckErr(err)
 		}
+
+		fmt.Println()
+		fmt.Println(styles.SuccessMessage("Execution completed"))
 
 	},
 }

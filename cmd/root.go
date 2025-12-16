@@ -8,13 +8,24 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "mvnp",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
+	Short: "Maven Plus - A terminal-friendly Maven workflow for people who prefer CLIs over IDEs",
+	Long: `Maven Plus (mvnp) - A terminal-friendly Maven workflow
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Maven Plus streamlines your Java development workflow with an intuitive
+command-line experience for Maven projects.
+
+Features:
+  • Interactive Project Creation - Create new Maven projects with a beautiful TUI
+  • Quick Run - Compile and run your Maven project with a single command
+  • Quick Test - Run all tests or specific test classes
+  • Java Version Selection - Choose Java version during project setup
+
+Common Commands:
+  mvnp init         Create a new Maven project
+  mvnp run          Compile and run your project
+  mvnp test         Run all tests
+
+For more information, visit: https://github.com/maxbrt/mvnp`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -27,5 +38,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// Custom initialization for rootCmd if needed
 }

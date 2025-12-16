@@ -3,22 +3,49 @@ package multiInput
 import (
 	"fmt"
 	"io"
-	"strings"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/maxbrt/mvnp/internal/ui/styles"
 )
 
-const listHeight = 11
+const listHeight = 14
 
 var (
-	titleStyle        = lipgloss.NewStyle().MarginLeft(2).Background(lipgloss.Color("240"))
-	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
-	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
-	paginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
-	helpStyle         = list.DefaultStyles().HelpStyle.PaddingLeft(4).PaddingBottom(1)
-	quitTextStyle     = lipgloss.NewStyle().Margin(1, 0, 2, 4)
+	titleStyle = lipgloss.NewStyle().
+			Bold(true).
+			Foreground(styles.Primary).
+			Background(styles.Muted).
+			Padding(0, 2).
+			MarginLeft(2).
+			MarginBottom(1)
+
+	itemStyle = lipgloss.NewStyle().
+			PaddingLeft(4).
+			Foreground(lipgloss.Color("252"))
+
+	selectedItemStyle = lipgloss.NewStyle().
+				PaddingLeft(2).
+				Foreground(styles.Primary).
+				Bold(true)
+
+	paginationStyle = list.DefaultStyles().
+			PaginationStyle.
+			PaddingLeft(4).
+			Foreground(styles.Muted)
+
+	helpStyle = list.DefaultStyles().
+			HelpStyle.
+			PaddingLeft(4).
+			PaddingBottom(1).
+			Foreground(styles.Muted).
+			Italic(true)
+
+	quitTextStyle = lipgloss.NewStyle().
+			Margin(1, 0, 2, 4).
+			Foreground(styles.Success).
+			Bold(true)
 )
 
 func InitialModel(items []list.Item, title string) Model {
@@ -49,16 +76,14 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 		return
 	}
 
-	str := fmt.Sprintf("* %s", i)
-
-	fn := itemStyle.Render
+	var str string
 	if index == m.Index() {
-		fn = func(s ...string) string {
-			return selectedItemStyle.Render("> " + strings.Join(s, " "))
-		}
+		str = selectedItemStyle.Render("▸ " + string(i))
+	} else {
+		str = itemStyle.Render("  " + string(i))
 	}
 
-	fmt.Fprint(w, fn(str))
+	fmt.Fprint(w, str)
 }
 
 type Model struct {
@@ -99,7 +124,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) View() string {
 	if m.Choice != "" {
-		return quitTextStyle.Render(fmt.Sprintf("%s Selected", m.Choice))
+		return quitTextStyle.Render(fmt.Sprintf("✓ Java %s selected", m.Choice))
 	}
 	if m.quitting {
 		return ""
