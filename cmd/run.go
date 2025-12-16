@@ -30,13 +30,16 @@ Examples:
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println(styles.InfoMessage("Compiling and running your project..."))
 		fmt.Println()
+		var c *exec.Cmd
+		if len(args) > 0 {
+			joinedArgs := strings.Join(args, " ")
+			mavenArgs := fmt.Sprintf("-Dexec.args=%s", joinedArgs)
+			c = exec.Command("mvn", "compile", "exec:java", mavenArgs)
+		} else {
+			c = exec.Command("mvn", "compile", "exec:java")
+		}
 
-		joinedArgs := strings.Join(args, " ")
-
-		mavenArgs := fmt.Sprintf("-Dexec.args=%s", joinedArgs)
-
-		c := exec.Command("mvn", "compile", "exec:java", mavenArgs)
-
+		c.Stdin = os.Stdin
 		c.Stdout = os.Stdout
 		c.Stderr = os.Stderr
 
@@ -46,10 +49,6 @@ Examples:
 			fmt.Println(styles.ErrorMessage("Failed to run project"))
 			cobra.CheckErr(err)
 		}
-
-		fmt.Println()
-		fmt.Println(styles.SuccessMessage("Execution completed"))
-
 	},
 }
 
