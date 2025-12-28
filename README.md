@@ -1,5 +1,3 @@
-# TODO
-
 # Maven Plus
 
 > A terminal-friendly Maven workflow for people who prefer CLIs over IDEs
