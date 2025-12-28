@@ -1,8 +1,6 @@
 package logo
 
 import (
-	"fmt"
-
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/maxbrt/mvnp/internal/ui/styles"
@@ -50,8 +48,7 @@ func (m Model) View() string {
 	// Style the "+" part with accent blue
 	plusStyle := lipgloss.NewStyle().
 		Foreground(styles.Accent).
-		Bold(true).
-		MarginLeft(1) // Visual separation
+		Bold(true)
 
 	// Join them horizontally
 	logo := lipgloss.JoinHorizontal(
@@ -62,13 +59,9 @@ func (m Model) View() string {
 
 	// Create a container without border, minimal padding
 	container := lipgloss.NewStyle().
-		Padding(0, 2).
-		MarginBottom(1).
+		Padding(1, 1).
 		Render(logo)
 
 	// Return the final view
-	return fmt.Sprintf(
-		"%s\n",
-		container,
-	)
+	return container
 }

@@ -19,8 +19,7 @@ var (
 	// Title styles
 	TitleStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(Primary).
-			MarginBottom(1)
+			Foreground(Primary)
 
 	SubtitleStyle = lipgloss.NewStyle().
 			Foreground(Secondary).
@@ -29,28 +28,23 @@ var (
 	// Message styles
 	SuccessStyle = lipgloss.NewStyle().
 			Foreground(Success).
-			Bold(true).
-			Padding(0, 1)
+			Bold(true)
 
 	ErrorStyle = lipgloss.NewStyle().
 			Foreground(Error).
-			Bold(true).
-			Padding(0, 1)
+			Bold(true)
 
 	WarningStyle = lipgloss.NewStyle().
 			Foreground(Warning).
-			Bold(true).
-			Padding(0, 1)
+			Bold(true)
 
 	InfoStyle = lipgloss.NewStyle().
-			Foreground(Info).
-			Padding(0, 1)
+			Foreground(Info)
 
 	// Input styles
 	PromptStyle = lipgloss.NewStyle().
 			Foreground(Primary).
-			Bold(true).
-			MarginBottom(1)
+			Bold(true)
 
 	InputStyle = lipgloss.NewStyle().
 			Foreground(Accent).
@@ -62,26 +56,22 @@ var (
 	BoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(Primary).
-			Padding(1, 2).
-			MarginTop(1).
-			MarginBottom(1)
+			Padding(0, 1)
 
 	HighlightBoxStyle = lipgloss.NewStyle().
 				Border(lipgloss.DoubleBorder()).
 				BorderForeground(Accent).
-				Padding(1, 2).
-				MarginTop(1).
-				MarginBottom(1)
+				Padding(0, 1)
 
 	// List styles
 	SelectedItemStyle = lipgloss.NewStyle().
 				Foreground(Primary).
 				Bold(true).
-				PaddingLeft(2)
+				PaddingLeft(1)
 
 	UnselectedItemStyle = lipgloss.NewStyle().
 				Foreground(Muted).
-				PaddingLeft(4)
+				PaddingLeft(2)
 
 	// Spinner style
 	SpinnerStyle = lipgloss.NewStyle().

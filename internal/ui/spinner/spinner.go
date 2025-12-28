@@ -24,8 +24,7 @@ type model struct {
 func InitialModel(message string, task func() error) model {
 	s := spinner.New()
 	s.Spinner = spinner.Dot
-	s.Style = lipgloss.NewStyle().Foreground(styles.Primary).Bold(true)
-	s.Style = lipgloss.NewStyle().MarginLeft(2)
+	s.Style = lipgloss.NewStyle().Foreground(styles.Primary).Bold(true).MarginLeft(1)
 	return model{
 		spinner: s,
 		message: message,
@@ -80,12 +79,11 @@ func (m model) View() string {
 	}
 
 	messageStyle := lipgloss.NewStyle().
-		Foreground(styles.Info).
-		MarginLeft(1)
+		Foreground(styles.Info)
 
-	str := fmt.Sprintf("\n%s %s\n\n", m.spinner.View(), messageStyle.Render(m.message))
+	str := fmt.Sprintf("%s %s", m.spinner.View(), messageStyle.Render(m.message))
 	if m.quitting {
-		return str + "\n"
+		return str
 	}
 	return str
 }

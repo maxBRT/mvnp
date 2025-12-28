@@ -16,20 +16,16 @@ import (
 
 var genCmd = &cobra.Command{
 	Use:   "gen",
-	Short: "",
+	Short: "Generate a new Java class, interface, enum, or record",
 	Long: `
+	Generate a new Java class, interface, enum, or record
+	
+	This command will prompt you for the following:
+	- Java Type
+	- Java Package
+	- Class Name
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		dir, err := os.Getwd()
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		root, err := g.FindRoot(dir)
-		if err != nil {
-			fmt.Println(err)
-		}
-
 		types := []list.Item{
 			multiInput.Item("Class"),
 			multiInput.Item("Interface"),
@@ -46,6 +42,15 @@ var genCmd = &cobra.Command{
 		}
 		typeChoice := m.(multiInput.Model)
 
+		dir, err := os.Getwd()
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		root, err := g.FindRoot(dir)
+		if err != nil {
+			fmt.Println(err)
+		}
 		packages, err := g.ListAllPackages(root)
 		if err != nil {
 			fmt.Println(err)
@@ -71,7 +76,7 @@ var genCmd = &cobra.Command{
 			cobra.CheckErr(err)
 		}
 
-		class := g.NewClassData(strings.TrimPrefix(packageChoice.Choice, "src.main.java."), className.Output, g.ParseType(typeChoice.Choice))
+		class := g.NewClassData(strings.TrimPrefix(packageChoice.Choice, "src.main.java."), className.Output, typeChoice.Choice)
 		classTemplate, err := g.ClassTemplate(*class)
 		if err != nil {
 			fmt.Println(err)

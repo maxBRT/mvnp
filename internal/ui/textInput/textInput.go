@@ -72,22 +72,21 @@ func (m model) View() string {
 	headerStyle := lipgloss.NewStyle().
 		Foreground(styles.Primary).
 		Bold(true).
-		MarginLeft(2)
+		MarginLeft(1)
 
 	inputBoxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(styles.Primary).
 		Padding(0, 1).
-		MarginLeft(2)
+		MarginLeft(1)
 
 	helpStyle := lipgloss.NewStyle().
 		Foreground(styles.Muted).
 		Italic(true).
-		MarginTop(1).
-		MarginLeft(2)
+		MarginLeft(1)
 
 	return fmt.Sprintf(
-		"\n%s\n%s\n\n%s\n",
+		"%s\n%s\n%s",
 		headerStyle.Render(m.header),
 		inputBoxStyle.Render(m.textInput.View()),
 		helpStyle.Render("Press Enter to confirm • Esc to cancel"),

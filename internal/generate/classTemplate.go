@@ -1,3 +1,4 @@
+// Package generate provides functions for generating Java files like classes, interfaces, enums, and records
 package generate
 
 import (
@@ -5,25 +6,31 @@ import (
 	"text/template"
 )
 
+// Represents a Java class file template
 type ClassData struct {
 	Package   string
 	ClassName string
 	Type      string
 }
 
-func NewClassData(packageName, className string, typeName Type) *ClassData {
+// Constructor for ClassData
+// Take in a string but make sure its a valid class type
+func NewClassData(packageName, className, typeName string) *ClassData {
+	parsedType := ParseType(typeName)
 	return &ClassData{
 		Package:   packageName,
 		ClassName: className,
-		Type:      typeName.String(),
+		Type:      parsedType.String(),
 	}
 }
 
+// Basic template for generating files
 const classTemplateStr = `package {{.Package}};
 
 public {{.Type}} {{.ClassName}} {}
 `
 
+// ClassTemplate generates a class template
 func ClassTemplate(data ClassData) (string, error) {
 	tmpl, err := template.New("class").Parse(classTemplateStr)
 	if err != nil {
@@ -39,6 +46,7 @@ func ClassTemplate(data ClassData) (string, error) {
 	return buf.String(), nil
 }
 
+// Type Enum
 type Type int
 
 const (
@@ -49,6 +57,7 @@ const (
 	Record
 )
 
+// String returns the string representation of the Type
 func (t Type) String() string {
 	switch t {
 	case Class:
@@ -66,6 +75,7 @@ func (t Type) String() string {
 	}
 }
 
+// ParseType parses a string into a Type
 func ParseType(s string) Type {
 	switch s {
 	case "Class":

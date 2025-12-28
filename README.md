@@ -8,7 +8,6 @@ But let's be honest: Maven shines when you abstract it behind an IDE and click y
 
 **Maven Plus (mvnp)** bridges that gap with an intuitive command-line experience for Maven projects
 
-
 ## Features
 
 **Maven Plus** streamlines your Java development workflow:
@@ -16,7 +15,7 @@ But let's be honest: Maven shines when you abstract it behind an IDE and click y
 - **Interactive Project Creation** - Create new Maven projects with an intuitive TUI
 - **Quick Run** - Compile and run your Maven project with a single command
 - **Quick Test** - Run all tests or specific test classes
-- **Java Version Selection** - Choose Java version during project setup (8, 11, 17, 21, 25)
+- **Generate Classes** - Generate classes, iterface, enums and record with a single command
 
 ---
 
@@ -75,6 +74,11 @@ mvnp test
 mvnp test MyTest
 ```
 
+### Generate Classes
+
+```bash
+mvnp gen
+```
 ---
 
 ## Built With
@@ -87,6 +91,7 @@ Maven Plus is powered by some excellent Go libraries:
 | [Bubble Tea](https://github.com/charmbracelet/bubbletea) | Terminal UI framework |
 | [Bubbles](https://github.com/charmbracelet/bubbles) | TUI components |
 | [Lipgloss](https://github.com/charmbracelet/lipgloss) | Terminal styling |
+| [etree](https://github.com/beevik/etree) | XML parsing |
 
 ## License
 

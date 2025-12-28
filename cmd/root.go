@@ -11,20 +11,6 @@ var rootCmd = &cobra.Command{
 	Short: "Maven Plus - A terminal-friendly Maven workflow for people who prefer CLIs over IDEs",
 	Long: `Maven Plus (mvnp) - A terminal-friendly Maven workflow
 
-Maven Plus streamlines your Java development workflow with an intuitive
-command-line experience for Maven projects.
-
-Features:
-  • Interactive Project Creation - Create new Maven projects with a beautiful TUI
-  • Quick Run - Compile and run your Maven project with a single command
-  • Quick Test - Run all tests or specific test classes
-  • Java Version Selection - Choose Java version during project setup
-
-Common Commands:
-  mvnp init         Create a new Maven project
-  mvnp run          Compile and run your project
-  mvnp test         Run all tests
-
 For more information, visit: https://github.com/maxbrt/mvnp`,
 }
 

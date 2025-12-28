@@ -10,40 +10,38 @@ import (
 	"github.com/maxbrt/mvnp/internal/ui/styles"
 )
 
-const listHeight = 14
+const listHeight = 8
 
 var (
 	titleStyle = lipgloss.NewStyle().
 			Bold(true).
 			Foreground(styles.Primary).
 			Background(styles.Muted).
-			Padding(0, 2).
-			MarginLeft(2).
-			MarginBottom(1)
+			Padding(0, 1).
+			MarginLeft(1)
 
 	itemStyle = lipgloss.NewStyle().
-			PaddingLeft(4).
+			PaddingLeft(2).
 			Foreground(lipgloss.Color("252"))
 
 	selectedItemStyle = lipgloss.NewStyle().
-				PaddingLeft(2).
+				PaddingLeft(1).
 				Foreground(styles.Primary).
 				Bold(true)
 
 	paginationStyle = list.DefaultStyles().
 			PaginationStyle.
-			PaddingLeft(4).
+			PaddingLeft(2).
 			Foreground(styles.Muted)
 
 	helpStyle = list.DefaultStyles().
 			HelpStyle.
-			PaddingLeft(4).
-			PaddingBottom(1).
+			PaddingLeft(2).
 			Foreground(styles.Muted).
 			Italic(true)
 
 	quitTextStyle = lipgloss.NewStyle().
-			Margin(1, 0, 2, 4).
+			Margin(0, 0, 0, 2).
 			Foreground(styles.Success).
 			Bold(true)
 )
@@ -123,11 +121,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m Model) View() string {
-	if m.Choice != "" {
-		return quitTextStyle.Render(fmt.Sprintf("✓ Java %s selected", m.Choice))
-	}
 	if m.quitting {
 		return ""
 	}
-	return "\n" + m.list.View()
+	return m.list.View()
 }
