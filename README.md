@@ -1,3 +1,9 @@
+# TODO
+
+- [ ] Create a type to represent the pom.xml
+- [ ] Implement the visitor pattern for the xml parse tree
+- [ ] Recursively traverse the pom.xml and find: dependencies, plugins, versions, etc.
+
 # Maven Plus
 
 > A terminal-friendly Maven workflow for people who prefer CLIs over IDEs

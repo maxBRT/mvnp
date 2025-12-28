@@ -10,6 +10,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var mainClass string
+
 // runCmd represents the run command
 var runCmd = &cobra.Command{
 	Use:   "run [args...]",
@@ -20,6 +22,8 @@ This command compiles your Java project and executes the main class configured
 in your pom.xml (via exec-maven-plugin). Any arguments provided will be passed
 to your Java application.
 
+If exec-maven-plugin is not configured in your pom.xml, you can use the '--main' or '-m' flag to specify the main class.
+
 Examples:
   # Run the project without arguments
   mvnp run
@@ -28,15 +32,28 @@ Examples:
   mvnp run arg1 arg2 arg3
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(styles.InfoMessage("Compiling and running your project..."))
-		fmt.Println()
 		var c *exec.Cmd
-		if len(args) > 0 {
-			joinedArgs := strings.Join(args, " ")
-			mavenArgs := fmt.Sprintf("-Dexec.args=%s", joinedArgs)
-			c = exec.Command("mvn", "compile", "exec:java", mavenArgs)
+
+		// Check for --main or -m flag
+		if mainClass != "" {
+			if len(args) > 0 {
+				joinedArgs := strings.Join(args, " ")
+				mavenArgs := fmt.Sprintf("-Dexec.args=%s", joinedArgs)
+				mainClass = fmt.Sprintf("-Dexec.mainClass=%s", mainClass)
+				c = exec.Command("mvn", "compile", "exec:java", mainClass, mavenArgs)
+			} else {
+				mainClass = fmt.Sprintf("-Dexec.mainClass=%s", mainClass)
+				c = exec.Command("mvn", "compile", "exec:java", mainClass)
+			}
 		} else {
-			c = exec.Command("mvn", "compile", "exec:java")
+			// Use the default exec-maven-plugin configuration
+			if len(args) > 0 {
+				joinedArgs := strings.Join(args, " ")
+				mavenArgs := fmt.Sprintf("-Dexec.args=%s", joinedArgs)
+				c = exec.Command("mvn", "compile", "exec:java", mavenArgs)
+			} else {
+				c = exec.Command("mvn", "compile", "exec:java")
+			}
 		}
 
 		c.Stdin = os.Stdin
@@ -54,4 +71,6 @@ Examples:
 
 func init() {
 	rootCmd.AddCommand(runCmd)
+
+	runCmd.Flags().StringVarP(&mainClass, "main", "m", "", "The main class to execute (e.g. com.example.App)")
 }

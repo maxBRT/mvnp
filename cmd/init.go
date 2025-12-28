@@ -10,11 +10,11 @@ import (
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/maxbrt/mvnp/internal/pom"
 	"github.com/maxbrt/mvnp/internal/ui/logo"
 	"github.com/maxbrt/mvnp/internal/ui/multiInput"
 	"github.com/maxbrt/mvnp/internal/ui/spinner"
 	"github.com/maxbrt/mvnp/internal/ui/textInput"
-	projectobjectmodel "github.com/maxbrt/mvnp/internal/xml/projectObjectModel"
 	"github.com/spf13/cobra"
 )
 
@@ -120,46 +120,36 @@ After creation, navigate to your project directory and use:
 			// Display Maven's stderr output if available
 			if result.stderr != "" {
 				fmt.Println(result.stderr)
+			} else {
+				cobra.CheckErr(result.err)
 			}
-			cobra.CheckErr(result.err)
 		}
 
-		// Read pom.xml
-		pom, err := projectobjectmodel.UnmarshalPOM(filepath.Join(project.ArtifactId.Output, "pom.xml"))
-		if err != nil {
-			cobra.CheckErr(result.err)
+		pomPath := filepath.Join(project.ArtifactId.Output, "pom.xml")
+
+		// Parse the pom
+		doc := pom.ParsePOM(pomPath)
+		if doc == nil {
+			fmt.Println("Failed to parse pom.xml")
+			return
 		}
 
 		// Set the Java version
-		pom.JavaVersionRelease = project.Version.Output
-		pom.JavaVersionSource = project.Version.Output
+		root := doc.SelectElement("project")
+		pom.SetJavaVersion(root, project.Version.Output)
 
 		// Add the exec-maven-plugin
-		pom.AddPlugin(projectobjectmodel.Plugin{
-			GroupId:    "org.codehaus.mojo",
-			ArtifactId: "exec-maven-plugin",
-			Version:    "3.6.2",
-			Configuration: &projectobjectmodel.PluginConfig{
-				ConfigTags: []projectobjectmodel.ConfigTag{
-					{
-						Name:  "mainClass",
-						Value: project.GroupId.Output + ".App",
-					},
-				},
-			},
-		})
-
-		// Rewrite pom.xml
-		pomBytes, err := pom.MarshalPOM()
+		v, err := pom.GetLatestVersion("org.codehaus.mojo", "exec-maven-plugin")
 		if err != nil {
-			cobra.CheckErr(err)
+			fmt.Println(err)
+			return
 		}
+		p := pom.AddPlugin(root, "org.codehaus.mojo", "exec-maven-plugin", v)
+		mainClass := fmt.Sprintf("%s.App", project.GroupId.Output)
+		p.AddConfiguration("mainClass", mainClass)
 
-		err = os.WriteFile(filepath.Join(project.ArtifactId.Output, "pom.xml"), pomBytes, 0644)
-		if err != nil {
-			cobra.CheckErr(err)
-		}
-
+		// Write the pom.xml
+		doc.WriteToFile(pomPath)
 	},
 }
 
