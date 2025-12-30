@@ -4,7 +4,7 @@
 
 Maven is great, and that's why I'm building on top of it.
 
-But let's be honest: Maven shines when you abstract it behind an IDE and click your way into creating classes and adding dependencies. When it comes to using a terminal-centric workflow and a text editor like Neovim, Java tooling just isn't there.
+But let's be honest: Maven shines when you abstract it behind an IDE. When it comes to using a terminal-centric workflow and a text editor like Neovim, Java tooling just isn't there.
 
 **Maven Plus (mvnp)** bridges that gap with an intuitive command-line experience for Maven projects
 
@@ -13,8 +13,6 @@ But let's be honest: Maven shines when you abstract it behind an IDE and click y
 **Maven Plus** streamlines your Java development workflow:
 
 - **Interactive Project Creation** - Create new Maven projects with an intuitive TUI
-- **Quick Run** - Compile and run your Maven project with a single command
-- **Quick Test** - Run all tests or specific test classes
 - **Generate Classes** - Generate classes, iterface, enums and record with a single command
 
 ---
@@ -46,32 +44,6 @@ go build -o mvnp
 
 ```bash
 mvnp init
-```
-
-### Run Your Project
-
-```bash
-mvnp run
-```
-
-**With arguments:**
-
-```bash
-mvnp run arg1 arg2 arg3
-```
-
-### Run Tests
-
-**All tests:**
-
-```bash
-mvnp test
-```
-
-**Specific test class:**
-
-```bash
-mvnp test MyTest
 ```
 
 ### Generate Classes
